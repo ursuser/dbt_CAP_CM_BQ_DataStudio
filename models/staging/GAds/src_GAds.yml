@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: google_ads_322_300_5315
+    database: cap-cm-md
+    tables:
+      - name: p_ads_CampaignBasicStats_3223005315
+      

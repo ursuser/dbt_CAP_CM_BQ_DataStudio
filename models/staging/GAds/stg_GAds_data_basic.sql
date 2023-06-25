@@ -5,7 +5,7 @@ SELECT
   SUM(metrics_clicks) AS Clicks,
   SUM(metrics_cost_micros) / 1000000 AS Cost
 FROM
-   `cap-cm-md`.`google_ads_322_300_5315`.`p_ads_CampaignBasicStats_3223005315`
+   {{source('google_ads_322_300_5315', 'p_ads_CampaignBasicStats_3223005315')}}
 GROUP BY
   segments_date,
   campaign_id
