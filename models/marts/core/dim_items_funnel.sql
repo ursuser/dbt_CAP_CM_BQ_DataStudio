@@ -5,7 +5,7 @@ SELECT
     items.item_category,
     SUM(IFNULL(items.quantity, 1)) AS items
 FROM 
-  `cap-cm-md`.`analytics_293084740`.`events_202*`,
+  {{source('analytics_293084740', 'events_202*')}},
     UNNEST(items) AS items
 GROUP BY 
     event_name,

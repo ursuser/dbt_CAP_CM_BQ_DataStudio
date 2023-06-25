@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: analytics_293084740
+    database: cap-cm-md
+    tables:
+      - name: events_202*
+      

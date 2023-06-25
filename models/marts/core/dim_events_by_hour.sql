@@ -6,7 +6,7 @@ SELECT
   COUNTIF(event_name = 'add_to_cart') AS add_to_cart,
   COUNTIF(event_name = 'purchase') AS purchase
 FROM 
-  `cap-cm-md`.`analytics_293084740`.`events_202*`
+  {{source('analytics_293084740', 'events_202*')}}
 GROUP BY
   hour
 ORDER BY
