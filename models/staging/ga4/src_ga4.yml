@@ -5,4 +5,8 @@ sources:
     database: cap-cm-md
     tables:
       - name: events_202*
+        loaded_at_field: timestamp(FORMAT_TIMESTAMP('%Y-%m-%d %H:%M:%E*S %Z', TIMESTAMP_MICROS(event_timestamp)))
+        freshness:
+          warn_after: {count: 24, period: hour}
+          error_after: {count: 24, period: hour}
       
