@@ -1,9 +1,3 @@
-{{
-    config(
-        materialized='incremental'
-    )
-}}
-
 select
     event_date,
     user_pseudo_id,
@@ -37,7 +31,4 @@ group by
     first_user_medium,
     first_user_source,
     first_user_campaign
-
-{% if is_incremental() %}
-    where event_date > (select max(event_date) from {{ this }})
-{% endif %}
+order by event_date desc
