@@ -3,6 +3,7 @@
     unique_key = 'order_id'
 ) }}
 
+
 SELECT
     event_date,
     order_id,
