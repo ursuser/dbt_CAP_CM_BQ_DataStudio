@@ -22,18 +22,15 @@ with
     (
         select distinct
             event_date,
-            event_timestamp, 
             device.category, 
             event_name, 
             count(event_name) as quantity
         from ga4_source
         where device.category = 'desktop'
         group by 
+            event_date,
             device.category, 
-            event_name, 
-            event_date, 
-            event_timestamp
-        order by event_date desc
+            event_name
     )
 
 {% if is_incremental() %}
