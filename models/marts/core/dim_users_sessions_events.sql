@@ -1,27 +1,24 @@
-with
-    ga4_source as
+with ga4_source as
 
-    (select * from {{ source("analytics_293084740", "events_202*") }}),
+    (select * from {{ source('analytics_293084740', 'events_202*') }}),
 
-    {% set partitions_to_replace = [
-        "timestamp(current_date)",
-        "timestamp(date_sub(current_date, interval 3 day))"
-    ] %}
+{% set partitions_to_replace = [
+  'timestamp(current_date)',
+  'timestamp(date_sub(current_date, interval 3 day))'
+] %}
 
-    {{
-        config(
-            materialized="incremental",
-            incremental_strategy="insert_overwrite",
-            partition_by={"field": "_table_suffix", "data_type": "string"},
-            partitions=partitions_to_replace
-        )
-    }}
+{{ config(
+    materialized='incremental',
+    incremental_strategy = 'insert_overwrite',
+    partition_by = {'field' : 'event_date', 'data_type' : 'date'},
+    partitions = partitions_to_replace
+)}}
 
     final as
 
     (
         select
-            event_date,
+            parse_date('%Y%m%d', event_date) as event_date,
             user_pseudo_id,
             concat(
                 user_pseudo_id,
@@ -43,10 +40,8 @@ with
     )
 
 {% if is_incremental() %}
-    where
-        timestamp_trunc(timestamp_micros(event_timestamp), day)
-        in ({{ partitions_to_replace | join(",") }})
-{% endif %}
+        where event_date in ({{ partitions_to_replace | join(',') }})
+    {% endif %}
 
 select *
 from final
