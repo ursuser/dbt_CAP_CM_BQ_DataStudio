@@ -39,4 +39,9 @@ models:
         +materialized: table
     staging:
       +materialized: view
+tests:
+  cap_cm_md:
+    +severity: warn
+    +store_failures: true
+
 
