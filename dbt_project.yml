@@ -43,6 +43,5 @@ tests:
   cap_cm_md:
     +severity: warn
     +store_failures: true
-    +schema: test_failures
 
 
