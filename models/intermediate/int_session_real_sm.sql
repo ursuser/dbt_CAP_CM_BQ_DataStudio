@@ -171,6 +171,6 @@ select
     event_timestamp,
     user_pseudo_id,
     real_session_id,
-    concat(real_session_source, ' / ', real_session_medium) as ream_session_sm,
+    concat(real_session_source, ' / ', real_session_medium) as real_session_sm,
     real_session_campaign
 from final
