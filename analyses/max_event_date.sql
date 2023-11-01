@@ -1,4 +1,4 @@
 SELECT
-  MAX(event_date)
+  MAX(event_date) as max_date
 FROM 
-  {{source('analytics_293084740', 'events_202*')}}
+  {{source('analytics_293084740', 'events')}}

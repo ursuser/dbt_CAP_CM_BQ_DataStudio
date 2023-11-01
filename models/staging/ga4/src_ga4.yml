@@ -4,8 +4,11 @@ sources:
   - name: analytics_293084740
     database: cap-cm-md
     tables:
-      - name: events_202*
-        loaded_at_field: timestamp(FORMAT_TIMESTAMP('%Y-%m-%d %H:%M:%E*S %Z', TIMESTAMP_MICROS(event_timestamp)))
+      - name: events
+        identifier: "events_*"
+
+        loaded_at_field: "parse_timestamp('%Y%m%d', regexp_extract(_table_suffix, '[0-9]+'))"
+        
         freshness:
           warn_after: {count: 36, period: hour}
           error_after: {count: 48, period: hour}

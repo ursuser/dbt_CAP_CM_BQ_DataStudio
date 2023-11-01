@@ -19,7 +19,7 @@ select
     countif(event_name = 'add_payment_info') as add_payment_info,
     countif(event_name = 'purchase') as purchase,
     round(ecommerce.purchase_revenue, 2) as revenue
-from {{ source("analytics_293084740", "events_202*") }}
+from {{ source("analytics_293084740", "events") }}
 group by
     event_date,
     user_pseudo_id,

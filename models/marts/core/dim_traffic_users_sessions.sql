@@ -11,7 +11,7 @@ with
                     where key = 'ga_session_id'
                 )
             ) as session_id,
-        from {{ source("analytics_293084740", "events_202*") }}
+        from {{ source("analytics_293084740", "events") }}
         group by event_date, user_pseudo_id, session_id
     )
 

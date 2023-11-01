@@ -1,13 +1,10 @@
-SELECT
-  EXTRACT(HOUR
-  FROM
-    TIMESTAMP_MICROS(event_timestamp) AT TIME ZONE 'Europe/Chisinau') AS hour,
-  COUNT(user_pseudo_id) AS users,
-  COUNTIF(event_name = 'add_to_cart') AS add_to_cart,
-  COUNTIF(event_name = 'purchase') AS purchase
-FROM 
-  {{source('analytics_293084740', 'events_202*')}}
-GROUP BY
-  hour
-ORDER BY
-  users DESC
+select
+    extract(
+        hour from timestamp_micros(event_timestamp) at time zone 'Europe/Chisinau'
+    ) as hour,
+    count(user_pseudo_id) as users,
+    countif(event_name = 'add_to_cart') as add_to_cart,
+    countif(event_name = 'purchase') as purchase
+from {{ source("analytics_293084740", "events") }}
+group by hour
+order by users desc

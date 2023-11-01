@@ -1,7 +1,7 @@
 with
     ga4_source as
 
-    (select * from {{ source("analytics_293084740", "events_202*") }}),
+    (select * from {{ source("analytics_293084740", "events") }}),
 
     {{
         config(
