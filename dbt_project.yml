@@ -34,6 +34,8 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   cap_cm_md:
     # Applies to all files under models/example/
+    intermediate:
+      +materialized: view
     marts:
       core:
         +materialized: table
