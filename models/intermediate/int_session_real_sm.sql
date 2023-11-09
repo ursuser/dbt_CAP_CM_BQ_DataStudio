@@ -166,11 +166,13 @@ with
         from def_prep
     )
 
+
 select
     event_date,
     event_timestamp,
     user_pseudo_id,
     real_session_id,
-    concat(real_session_source, ' / ', real_session_medium) as real_session_sm,
-    real_session_campaign
+    max(concat(real_session_source, ' / ', real_session_medium)) as real_session_sm,
+    max(real_session_campaign) as real_session_campaign
 from final
+group by 1,2,3,4
