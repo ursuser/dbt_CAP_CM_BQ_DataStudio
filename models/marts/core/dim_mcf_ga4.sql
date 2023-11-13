@@ -27,11 +27,9 @@ with
         qualify conversion_rank = 1
     ),
 
+    sessions_prep as (
 
-sessions_prep as(
-
-
-select
+        select
             user_pseudo_id,
             (
                 select value.int_value
@@ -50,36 +48,35 @@ select
             ) as real_session_id,
             min(timestamp_micros(event_timestamp)) as session_start_timestamp,
             min(event_timestamp) as session_start_timestamp_join
-       from {{ source("analytics_293084740", "events") }}, variables
-        
+        from {{ source("analytics_293084740", "events") }}, variables
+
         where
             regexp_extract(_table_suffix, '[0-9]+') between format_date(
                 '%Y%m%d',
                 date_sub(
-                    current_date(), interval attribution_window + conversion_period day      
+                    current_date(), interval attribution_window + conversion_period day
                 )
             ) and format_date('%Y%m%d', date_sub(current_date(), interval 1 day))
-            and user_pseudo_id in (select distinct user_pseudo_id from conversions)   
-          
-        group by user_pseudo_id, session_id, real_session_id),
+            and user_pseudo_id in (select distinct user_pseudo_id from conversions)
 
+        group by user_pseudo_id, session_id, real_session_id
+    ),
 
-sessions as (
-        select 
+    sessions as (
+        select
             t1.user_pseudo_id,
             t1.session_id,
             session_start_timestamp,
             real_session_sm as source_medium
-         from sessions_prep as t1
-    left join {{ref('int_session_real_sm')}} as t2
-    on t1.real_session_id = t2.real_session_id
-    and t1.session_start_timestamp_join = t2.event_timestamp
+        from sessions_prep as t1
+        left join
+            {{ ref("int_session_real_sm") }} as t2
+            on t1.real_session_id = t2.real_session_id
+            and t1.session_start_timestamp_join = t2.event_timestamp
     ),
 
     sessions_joined as (
-        select sessions.*, 
-        conversions.conversion_id, 
-        conversions.conversion_timestamp
+        select sessions.*, conversions.conversion_id, conversions.conversion_timestamp
         from sessions
         left join
             conversions
@@ -87,7 +84,7 @@ sessions as (
             and sessions.session_id = conversions.session_id
     ),
 
-     attribution_raw as (
+    attribution_raw as (
         select
             *,
             count(distinct session_id) over (
@@ -228,52 +225,51 @@ sessions as (
         from attribution_raw
     ),
 
-final as (    
+    final as (
 
-select
-    'first_click' as attribution_model,
-    source_medium,
-    sum(attribution_weight) as attribution_weight,
-from first_click
-group by attribution_model, source_medium
-union all
-select
-    'last_click' as attribution_model,
-    source_medium,
-    sum(attribution_weight) as attribution_weight,
-from last_click
-group by attribution_model, source_medium
-union all
-select
-    'last_non_direct_click' as attribution_model,
-    source_medium,
-    sum(attribution_weight) as attribution_weight,
-from last_non_direct_click
-group by attribution_model, source_medium
-union all
-select
-    'linear' as attribution_model,
-    source_medium,
-    cast(round(sum(attribution_weight), 0) as integer) as attribution_weight,
-from linear
-group by attribution_model, source_medium
-union all
-select
-    'time_decay' as attribution_model,
-    source_medium,
-    cast(round(sum(attribution_weight), 0) as integer) as attribution_weight,
-from time_decay
-group by attribution_model, source_medium
-union all
-select
-    'position_based' as attribution_model,
-    source_medium,
-    cast(round(sum(attribution_weight), 0) as integer) as attribution_weight,
-from position_based
-group by attribution_model, source_medium
-order by attribution_weight desc),
+        select
+            'first_click' as attribution_model,
+            source_medium,
+            sum(attribution_weight) as attribution_weight,
+        from first_click
+        group by attribution_model, source_medium
+        union all
+        select
+            'last_click' as attribution_model,
+            source_medium,
+            sum(attribution_weight) as attribution_weight,
+        from last_click
+        group by attribution_model, source_medium
+        union all
+        select
+            'last_non_direct_click' as attribution_model,
+            source_medium,
+            sum(attribution_weight) as attribution_weight,
+        from last_non_direct_click
+        group by attribution_model, source_medium
+        union all
+        select
+            'linear' as attribution_model,
+            source_medium,
+            cast(round(sum(attribution_weight), 0) as integer) as attribution_weight,
+        from linear
+        group by attribution_model, source_medium
+        union all
+        select
+            'time_decay' as attribution_model,
+            source_medium,
+            cast(round(sum(attribution_weight), 0) as integer) as attribution_weight,
+        from time_decay
+        group by attribution_model, source_medium
+        union all
+        select
+            'position_based' as attribution_model,
+            source_medium,
+            cast(round(sum(attribution_weight), 0) as integer) as attribution_weight,
+        from position_based
+        group by attribution_model, source_medium
+        order by attribution_weight desc
+    )
 
-select * from final
-
-
-
+select *
+from final
