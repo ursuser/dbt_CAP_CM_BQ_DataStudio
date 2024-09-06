@@ -1,4 +1,5 @@
-with
+{% macro get_recently_modified_tables() %}
+  with
     tables as (
         select
             split(table_id, "_")[offset(1)] as table_name,
@@ -17,5 +18,4 @@ with
             last_modified
             > datetime_sub(current_datetime('Europe/Kiev'), 
             interval 3450 minute))  -- здесь на проде нужно выставить 1450 мин
-
-select * from final
+{% endmacro %}
