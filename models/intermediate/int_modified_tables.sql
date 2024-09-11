@@ -11,11 +11,11 @@ with
     ),
 
     final as (
-        select table_name
+        select parse_date('%Y%m%d',table_name) as table_modified_date
         from tables
         where
             last_modified
             > datetime_sub(current_datetime('Europe/Kiev'), 
-            interval 3450 minute))  -- здесь на проде нужно выставить 1450 мин
+            interval 5450 minute))  -- здесь на проде нужно выставить 1450 мин
 
 select * from final
