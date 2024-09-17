@@ -16,11 +16,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install requirements
-        run: |
-          pip install -r requirements.txt
-          dbt deps
-          cp profiles.example.yml profiles.yml
+ #     - name: Install requirements
+ #       run: |
+ #         pip install -r requirements.txt
+ #         dbt deps
+ #         cp profiles.example.yml profiles.yml
 
       - name: Generate docs
         run: dbt docs generate
