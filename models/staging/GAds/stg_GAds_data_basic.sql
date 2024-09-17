@@ -1,6 +1,6 @@
 SELECT
     segments_date,
-        campaign_id,
+    campaign_id,
     SUM(metrics_impressions) AS impr,
     SUM(metrics_clicks) AS clicks,
     SUM(metrics_cost_micros) / 1000000 AS cost
