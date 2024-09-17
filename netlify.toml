@@ -1,0 +1,6 @@
+[build]
+  command = "mkdir -p /opt/buildhome/.dbt && dbt docs generate"
+  publish = "target"
+
+[build.environment]
+  DBT_PROFILES_DIR = "/opt/buildhome/.dbt"
