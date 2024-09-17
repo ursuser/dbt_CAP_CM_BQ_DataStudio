@@ -2,7 +2,7 @@ name: Deploy dbt docs (Data Catalog) to GitHub Pages
 
 on:
   push:
-    branches: [dev]
+    branches: [sergiu_ursu]
 
 permissions:
   contents: write
