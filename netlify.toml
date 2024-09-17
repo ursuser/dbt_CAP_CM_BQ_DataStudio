@@ -1,5 +1,5 @@
 [build]
-  command = "mkdir -p /opt/buildhome/.dbt && dbt docs generate"
+  command = "pip install dbt-core dbt-bigquery && mkdir -p /opt/buildhome/.dbt && dbt docs generate"
   publish = "target"
 
 [build.environment]
