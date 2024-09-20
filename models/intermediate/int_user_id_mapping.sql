@@ -8,5 +8,7 @@ with
         having user_id is not null
     )
 
+-- just for test
+
 select *
 from user_id_mapping
