@@ -1,32 +1,38 @@
-{{
-    config
+{ { config (
+  materialized = "incremental",
+  unique_key = "session_id"
+) } }
+SELECT
+  event_date,
+  user_pseudo_id,
+  device.category,
+  platform,
+  geo.city,
+  CONCAT(
+    user_pseudo_id,
     (
-        materialized="incremental", 
-        unique_key="session_id"
+      SELECT
+        value.int_value
+      FROM
+        UNNEST (event_params)
+      WHERE
+        key = 'ga_session_id'
     )
-}}
-
-select
-    event_date,
-    user_pseudo_id,
-    device.category,
-    platform,
-    geo.city,
-    concat(
-        user_pseudo_id,
-        (select value.int_value from unnest(event_params) where key = 'ga_session_id')
-    ) session_id,
-    countif(event_name = 'session_start') as sessions
-from {{ source("analytics_293084740", "events") }}
-group by
-    event_date,
-    user_pseudo_id,
-    session_id,
-    device.category,
-    platform,
-    geo.city
-
-{% if is_incremental() %}
-    where
-        _table_suffix > (select max(_table_suffix) from {{ this }})
-{% endif %}
+  ) session_id,
+  COUNTIF(event_name = 'session_start') AS sessions
+FROM
+  { { source ("analytics_293084740", "events") } }
+GROUP BY
+  event_date,
+  user_pseudo_id,
+  session_id,
+  device.category,
+  platform,
+  geo.city { % IF is_incremental () % }
+WHERE
+  _table_suffix > (
+    SELECT
+      MAX(_table_suffix)
+    FROM
+      { { this } }
+  ) { % endif % }
