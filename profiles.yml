@@ -1,0 +1,56 @@
+cap_cm_md:
+  outputs:
+    dev:
+      project: dbt-space-cap-cm
+      dataset: dbt_ust_local
+      location: EU
+      type: bigquery
+      method: service-account
+      keyfile: "/Users/ursus/.credentials/dbt-space-cap-cm-f080995b540b.json"
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      priority: interactive
+      threads: 1
+  target: dev
+
+sello_bq_dbt:
+  outputs:
+    dev:
+      project: dbt-space-sello-uz
+      dataset: dbt_ust    # in the future is a good idea to have separate dataset for locl dbt
+      location: US
+      type: bigquery
+      method: service-account
+      keyfile: "/Users/ursus/.credentials/dbt-space-sello-uz-506ef6a1e5a3.json"
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      priority: interactive
+      threads: 1
+  target: dev
+# dbt_test_bq:
+#   outputs:
+#     dev:
+#       dataset: dbt_test_bq
+#       job_execution_timeout_seconds: 300
+#       job_retries: 1
+#       keyfile: "1"
+#       location: EU
+#       method: service-account
+#       priority: interactive
+#       project: all-in-one-md
+#       threads: 1
+#       type: bigquery
+#   target: dev
+# dbtlearn:
+#   outputs:
+#     dev:
+#       account: bm39281.us-east-2.aws
+#       database: AIRBNB
+#       password: "\x16"
+#       role: transform
+#       schema: DEV
+#       threads: 1
+#       type: snowflake
+#       user: dbt
+#       warehouse: COMPUTE_WH
+#   target: dev
