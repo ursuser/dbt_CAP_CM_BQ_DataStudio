@@ -1,5 +1,5 @@
 {
   "dbt.perspectiveTheme": "Pro Dark",
-  "dbt.enableNewLineagePanel": false,
+  "dbt.enableNewLineagePanel": true,
   "CodeGPT.apiKey": "CodeGPT Plus Beta"
 }
